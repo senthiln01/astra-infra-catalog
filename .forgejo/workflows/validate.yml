@@ -1,0 +1,32 @@
+name: Astra catalog static validation
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - modules/opentofu/compute/virtual-machine
+          - modules/opentofu/storage/volume
+          - modules/opentofu/security/secrets-manager
+    steps:
+      - uses: actions/checkout@v4
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.10.0
+      - name: Format
+        working-directory: ${{ matrix.module }}
+        run: tofu fmt -check -recursive
+      - name: Init
+        working-directory: ${{ matrix.module }}
+        run: tofu init -backend=false
+      - name: Validate
+        working-directory: ${{ matrix.module }}
+        run: tofu validate
+
+# Add a protected integration-test job only after STACKIT test-project credentials,
+# quotas, network prerequisites, serialized execution and cleanup monitoring are configured.

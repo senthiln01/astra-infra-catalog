@@ -1,0 +1,22 @@
+apiVersion: astra.icc.example/v1alpha1
+kind: InfrastructureCatalog
+metadata:
+  name: astra-infra-catalog
+spec:
+  owner: astra-platform
+  modules:
+    - name: virtual-machine
+      path: modules/opentofu/compute/virtual-machine
+      category: compute
+      releaseTagPrefix: virtual-machine/
+      status: experimental
+    - name: volume
+      path: modules/opentofu/storage/volume
+      category: storage
+      releaseTagPrefix: volume/
+      status: experimental
+    - name: secrets-manager
+      path: modules/opentofu/security/secrets-manager
+      category: security
+      releaseTagPrefix: secrets-manager/
+      status: experimental
